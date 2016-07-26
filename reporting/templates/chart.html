@@ -1,18 +1,15 @@
-<DOCTYPE html>
-<html>
-	<head>
-		<script src="static/js/require.js"></script>
-		<script>
-			require(['static/js/chart.js/Chart.bundle.min'], function(Chart){
-				var myChart = new Chart( document.getElementById("TempPi"),{
-					'type': 'line',
-					data: {},
-					options: {},
-				});
-			})
-		</script>
-	</head>
-	<body>
-		<canvas id="TempPi" width="400" height="400"></canvas>
-	</body>
-</html>
+{% extends "base.html" %}
+{% block headerscripts %}
+<script>
+	require(['static/js/chart.js/Chart.bundle.min'], function(Chart){
+		var myChart = new Chart( document.getElementById("TempPi"),{
+			'type': 'line',
+			data: {},
+			options: {},
+		});
+	})
+</script>
+{% endblock %}
+{% block maincontent %}
+	<canvas id="TempPi" width="400" height="400"></canvas>
+{% endblock %}

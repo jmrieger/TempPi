@@ -4,7 +4,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return render_template('chart.html');
+	return render_template('charts.html')
+
+@app.route('/charts/')
+def charts():
+    return render_template('charts.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
