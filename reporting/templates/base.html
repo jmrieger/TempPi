@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="static/js/require-setup.js"></script>
 		<script src="static/js/require.js"></script>
+		<script>
+			require(['jquery','bootstrap'], function($) {
+				$(function() {
+					console.log("Hello!");
+				});
+			});
+		</script>
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css" crossorigin="anonymous">
         {% block  headerscripts %}
         {% endblock %}
 	</head>
 	<body>
-        {% block mainmenu %}{% endblock %}
-        {% block  submenu %}{% endblock %}
+		{% block mainmenu %}{% endblock %}
+		{% block  submenu %}{% endblock %}
 
 		{% block maincontent %}{% endblock %}
 	</body>

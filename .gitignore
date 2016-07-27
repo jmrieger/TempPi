@@ -1,3 +1,5 @@
 .env
 /reporting/node_modules/
 temppi.db
+config.py
+*.pyc

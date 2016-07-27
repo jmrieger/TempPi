@@ -10,6 +10,9 @@ sudo apt-get -y install sqlite3 upstart
 # Install the dweet.io interface, dotenv interface
 pip install -U dweepy python-dotenv
 
+# Copy our .env vile
+mv .envexample .env
+
 # Initialize our SQLite3 database
 sqlite3 temppi.db
 sqlite3 temppi.db < install-db.sql
