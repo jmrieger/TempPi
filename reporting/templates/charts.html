@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block maincontent %}
 	<ul>
-		<li>Chart A</li>
-		<li>Chart B</li>
+	{% for batch in batches %}
+		{% if batch.startdate.strftime('%Y-%m-%d') == batch.enddate.strftime('%Y-%m-%d') %}
+		<li>{{ batch.batchname }} - {{ batch.startdate.strftime('%B %d, %Y') }} </li>
+		{% else %}
+		<li>{{ batch.batchname }} - {{ batch.startdate.strftime('%B %d, %Y') }} to {{ batch.enddate.strftime('%B %d, %Y') }}</li>
+		{% endif %}
+	{% endfor %}
 	</ul>
 {% endblock %}

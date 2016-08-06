@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="static/js/require-setup.js"></script>
-		<script src="static/js/require.js"></script>
+		<script src="{{ url_for('static', filename='js/require-setup.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/require.js') }}"></script>
 		<script>
 			require(['jquery','bootstrap'], function($) {
 				$(function() {

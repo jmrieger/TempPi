@@ -20,7 +20,7 @@ base_dir = get_key( find_dotenv(), 'PROBE-BASEDIR' ).lower()
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(7,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-last_temp = ''
+last_temp = {}
 conn = None
 curs = None
 
@@ -92,11 +92,11 @@ while True:
 			print (" Temp: " + str(temp_c), end="" )
 			print (" Batch: " + str(batch), end="" )
 
-			if curs and active == 'true' and ( last_temp != '{:0.4f}'.format(temp_c) or  alwayswrite== 'true' ) :
+			if curs and active == 'true' and ( last_temp.setdefault( batch, '') != '{:0.4f}'.format(temp_c) or  alwayswrite== 'true' ) :
 				try: 
 					curs.execute("INSERT INTO temppi (batchname, tempc, tempf, tstamp) VALUES(?, ?, ?, ?);", (batch, temp_c, temp_f, datetime.datetime.now() ) )
 					conn.commit()
-					last_temp = '{:0.4f}'.format(temp_c)
+					last_temp[batch] = '{:0.4f}'.format(temp_c)
 					print (" Logged temp in DB", end="")
 				except sqlite3.Error as er:
 					print (" Couldn't log temp into database: " + er.message, end="")

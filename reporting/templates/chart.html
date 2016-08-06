@@ -1,15 +1,44 @@
 {% extends "base.html" %}
 {% block headerscripts %}
 <script>
-	require(['static/js/chart.js/Chart.bundle.min'], function(Chart){
+	/*
+		Change to: http://canvasjs.com/javascript-charts/
+	*/
+	require(['/static/js/chart.js/Chart.bundle.min.js'], function(Chart){
+		var data = JSON.parse({{ jsondata|tojson|safe }} );
+		var lbls = [];
+		var dta = { tempc: [], tempf: []};
+		for( index in data ) {
+			var item = data[index];
+			lbls.push( item.tstamp );
+			dta.tempf.push( item.tempf );
+			dta.tempc.push( item.tempc );
+		}
 		var myChart = new Chart( document.getElementById("TempPi"),{
-			'type': 'line',
-			data: {},
-			options: {},
+			type: 'line',
+			data: {
+				labels: lbls,
+				datasets: [
+					{
+						label: 'Temp (*C)',
+						data: dta.tempc,
+						pointRadius: 0,
+					},
+					{
+						label: 'Temp (*F)',
+						data: dta.tempf,
+						pointRadius: 0,
+					}
+				],
+			},
+			options: {
+			},
 		});
 	})
 </script>
 {% endblock %}
 {% block maincontent %}
-	<canvas id="TempPi" width="400" height="400"></canvas>
+		
+	<h2>{{ batchname }}</h2>
+	<canvas id="TempPi" style='max-height: 500px;' ></canvas>
 {% endblock %}
