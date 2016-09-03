@@ -5,13 +5,13 @@ import sys
 import glob 
 import time
 import dweepy
+import tweepy
 import datetime
 import sqlite3
 import RPi.GPIO as GPIO
 
 from dotenv import load_dotenv, find_dotenv, get_key
 
- 
 os.system('modprobe w1-gpio') 
 os.system('modprobe w1-therm')
  
@@ -47,6 +47,18 @@ def read_temp(device_file):
         temp_string = lines[1][equals_pos+2:] 
         temp_c = float(temp_string) / 1000.0
         return temp_c
+
+def tweepy_auth():
+	at = get_key( find_dotenv(), 'TWITTER-ACCESS-TOKEN' )
+	ats = get_key( find_dotenv(), 'TWITTER-ACCESS-TOKEN-SECRET' )
+	ck = get_key( find_dotenv(), 'TWITTER-CONSUMER-KEY' )
+	cs = get_key( find_dotenv(), 'TWITTER-CONSUMER-SECRET' )
+	auth = tweepy.OAuthHandler(ck, cs)
+	auth.set_access_token(at, ats)
+
+	api = tweepy.API(auth)
+
+	return api
  
 while True: 
 	load_dotenv(find_dotenv())
@@ -61,6 +73,7 @@ while True:
 		probecnt = -1
 		for probe in probes:
 			probecnt += 1
+
 
 			probe = str(probe)
 			probe = probe.split(",")
@@ -93,6 +106,15 @@ while True:
 			print (" Batch: " + str(batch), end="" )
 
 			if curs and active == 'true' and ( last_temp.setdefault( batch, '') != '{:0.4f}'.format(temp_c) or  alwayswrite== 'true' ) :
+				if probe[0] == "28-0115639169ff" and temp_f > 50:
+					try:
+						twitter = tweepy_auth()
+						mytwitter = twitter.me()
+						twitter.send_direct_message( user_id=mytwitter.id, text=str(batch) + " Temp: " + str(temp_f) )
+					except Exception as ex:
+						print ("Twitter failed: {0}".format(ex) )
+
+
 				try: 
 					curs.execute("INSERT INTO temppi (batchname, tempc, tempf, tstamp) VALUES(?, ?, ?, ?);", (batch, temp_c, temp_f, datetime.datetime.now() ) )
 					conn.commit()
@@ -101,7 +123,7 @@ while True:
 				except sqlite3.Error as er:
 					print (" Couldn't log temp into database: " + er.message, end="")
 			if broadcast == 'true':
-				dweet_packet[probecnt] = {'temp_f':temp_f, 'temp_c':temp_c, 'localtime':datetime.datetime.now().isoformat(), 'batch-id' : batch }	
+				dweet_packet[probecnt] = {'temp_f':'{:0.4f}'.format(temp_f), 'temp_c':'{:0.4f}'.format(temp_c), 'localtime':datetime.datetime.now().isoformat(), 'batch-id' : batch }	
 
 			print ("")
 
