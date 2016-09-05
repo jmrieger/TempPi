@@ -133,8 +133,10 @@ while True:
 
 	if len(dweet_packet.keys()):
 		try:
-			dweepy.dweet_for( 'dymium-ferment-pi', dweet_packet )	
-			print (" Dweeted", end="")
+			dweet_key = get_key( find_dotenv(), 'DWEETY-KEY' ).lower()
+			if dweet_key != '':
+				dweepy.dweet_for( dweet_key, dweet_packet )	
+				print (" Dweeted", end="")
 		except:
 			print (" Couldn't log temp to dweetly",sys.exc_info()[0], end="")
 

@@ -1,0 +1,19 @@
+[Unit]
+Description=TempPi Daemon Service
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory={homeDir}
+ExecStart=/usr/bin/python {homeDir}/temperature.py
+ExecReload=/usr/bin/python {homeDir}/temperature.py
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target
+Alias=temppi.service

@@ -13,6 +13,6 @@ respawn
 
 post-stop exec sleep 10
 #script
-exec >/home/pi/TempPi/boot.log 2>&1
-exec python /home/pi/TempPi/temperature.py
+exec >{homeDir}/boot.log 2>&1
+exec python {homeDir}/temperature.py
 #end script
