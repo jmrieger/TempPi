@@ -55,12 +55,29 @@ if [ "$toInstallSystem" == "systemd" ]; then
 	mycwd=$(pwd)
 	cat temppi.systemd.inst | sed -e"s#{homeDir}#${mycwd}#g" > /lib/systemd/system/temppi.service
 	systemctl enable temppi.service
+	systemctl start temppi.service
 	echo "Done!"
 elif [ "$toInstallSystem" == "upstart"]; then
 	echo "Creating upstart service..."
 	mycwd=$(pwd)
 	cat temppi.upstart.inst | sed -e"s#{homeDir}#${mycwd}#g" > /etc/init/temppi.conf
 	echo "Done!"
+fi
+
+echo -n "Would you like to clean up installation files? 'Y' to remove files, 'H' to hide the files, and 'N' to keep the files as they exist (N is default) [Y/h/N]:"
+read cleanup
+if [ ${cleanup,,} == "y" ]; then
+	rm install.bash
+	rm install-db.sql
+	rm temppi.upstart.inst
+	rm temppi.systemd.init
+	rm install.bash
+elif [ ${cleanup,,} == "h" ]; then
+	mv install.bash .install.bash
+	mv install-db.sql .install-db.sql
+	mv temppi.upstart.inst .temppi.upstart.inst
+	mv temppi.systemd.inst .temppi.systemd.inst
+	mv install.bash .install.bash
 fi
 
 # We'll need to reboot the Pi after install, since upstart requires it...
