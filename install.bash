@@ -5,10 +5,10 @@ sudo apt-get update
 sudo apt-get upgrade
 
 # Install our standard dev tools
-sudo apt-get -y install sqlite3 upstart
+sudo apt-get -y install sqlite3 
 
 # Install the dweet.io interface, dotenv interface
-pip install -U dweepy python-dotenv
+pip install -U dweepy tweepy python-dotenv
 
 # Copy our .env vile
 mv .envexample .env
