@@ -106,11 +106,12 @@ while True:
 			print (" Batch: " + str(batch), end="" )
 
 			if curs and active == 'true' and ( last_temp.setdefault( batch, '') != '{:0.4f}'.format(temp_c) or  alwayswrite== 'true' ) :
-				if probe[0] == "28-0115639169ff" and temp_f > 50:
+				if probe[0] == "28-011563aeb6ff" and temp_f > 67:
 					try:
-						twitter = tweepy_auth()
-						mytwitter = twitter.me()
-						twitter.send_direct_message( user_id=mytwitter.id, text=str(batch) + " Temp: " + str(temp_f) )
+						if ( last_temp.get(batch) != '' ):
+							twitter = tweepy_auth()
+							mytwitter = twitter.get_user('jmrieger')
+							twitter.send_direct_message( user_id=mytwitter.id, text=str(batch) + " Temp: " + str(temp_f) )
 					except Exception as ex:
 						print ("Twitter failed: {0}".format(ex) )
 
